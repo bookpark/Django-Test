@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
+from .forms import PostForm
 from .models import Post
 
 
@@ -17,4 +18,22 @@ def post_detail(request, pk):
         'post': post,
     }
     return render(request, 'post/post_detail.html', context)
+
+
+def post_create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            Post.objects.create(
+                title=form.cleaned_data['title'],
+                photo=form.cleaned_data['photo'],
+            )
+        return redirect('post_list')
+    else:
+        form = PostForm()
+        context = {
+            'form': form,
+        }
+    return render(request, 'post/post_create.html', context)
+
 
