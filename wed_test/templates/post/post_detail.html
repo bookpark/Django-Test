@@ -3,4 +3,8 @@
 {% block content %}
     <h3>{{ post.title }}</h3>
     <img src="{{ post.photo.url }}">
+    <form action="{% url 'post_delete' pk=post.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">지우기</button>
+    </form>
 {% endblock %}

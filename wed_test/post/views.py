@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from .forms import PostForm
@@ -36,4 +37,11 @@ def post_create(request):
         }
     return render(request, 'post/post_create.html', context)
 
+
+def post_delete(request, pk):
+    if request.method == 'POST':
+        post = Post.objects.get(pk=pk)
+        post.delete()
+        return redirect('post_list')
+    return HttpResponse('Permission Denied', status=403)
 
